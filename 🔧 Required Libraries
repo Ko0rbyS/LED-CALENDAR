@@ -1,0 +1,10 @@
+This project uses the following Arduino libraries:
+
+- [Adafruit NeoPixel](https://github.com/adafruit/Adafruit_NeoPixel) – controls the LED strip.
+- [DS1302 RTC Library](https://github.com/msparks/arduino-ds1302) – handles real-time clock functions.
+
+📦 You can install these via the Arduino Library Manager:
+1. Open Arduino IDE
+2. Go to **Tools > Manage Libraries...**
+3. Search for “NeoPixel” and “DS1302”
+4. Click “Install”
