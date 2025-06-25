@@ -1,19 +1,28 @@
 ## 🔧 Required Libraries
 
-To run this project, you need to install the following libraries in the Arduino IDE:
+To run this project, you need to install the following libraries using the Arduino IDE:
+
+---
 
 ### 📦 Libraries
 
-- **[Adafruit NeoPixel](https://github.com/adafruit/Adafruit_NeoPixel)**  
-  _Used for controlling the RGB LED strip._
+**Adafruit NeoPixel**  
+🔗 [https://github.com/adafruit/Adafruit_NeoPixel](https://github.com/adafruit/Adafruit_NeoPixel)  
+💡 _Used to control the RGB LED strip._
 
-- **[DS1302 RTC Library](https://github.com/msparks/arduino-ds1302)**  
-  _Used for reading real-time clock data from the DS1302 chip._
+**DS1302 RTC Library**  
+🔗 [https://github.com/msparks/arduino-ds1302](https://github.com/msparks/arduino-ds1302)  
+💡 _Used to communicate with the DS1302 real-time clock._
 
-### 🧰 How to Install
+---
 
-1. 🟢 Open the **Arduino IDE**
-2. 🛠 Go to **Tools → Manage Libraries**
-3. 🔍 Search for `NeoPixel`
-4. ✅ Click **Install**
-5. Repeat the same steps for `DS1302`
+###  Installation Steps
+
+1. 🟢 **Open** the Arduino IDE  
+2. 🛠 **Go to:** Tools → Manage Libraries  
+3. 🔍 **Search for:** `NeoPixel`  
+4. ✅ **Click:** Install  
+5. 🔁 Repeat for `DS1302`
+
+---
+
