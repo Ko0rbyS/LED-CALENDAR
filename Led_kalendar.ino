@@ -10,7 +10,8 @@ const char* internal_signature = "🍀Autor: Ko0rbyS| Project:LED CALENDAR| ID: 
 // LED pásek
 #define LED_PIN    6
 #define NUM_LEDS   128
-#define BRIGHTNESS 76
+//#define BRIGHTNESS 5
+
 
 Adafruit_NeoPixel strip(NUM_LEDS, LED_PIN, NEO_GRB + NEO_KHZ800);
 DS1302 rtc(DS1302_RST, DS1302_DAT, DS1302_CLK);
@@ -183,6 +184,13 @@ void vykresliPozadi() {
   for (int i = 0; i < sizeof(zhasnout_navic) / sizeof(int); i++)
     strip.setPixelColor(zhasnout_navic[i], 0);
 }
+int zjistiJas(int hodina) {
+  if (hodina >= 6 && hodina < 12) return 3; // ráno: silný jas
+  if (hodina >= 12 && hodina < 18) return 4; // odpoledne
+  if (hodina >= 18 && hodina < 22) return 1; // večer
+  return 0; // noc (22–6)
+}
+
 
 
 void zobraz3() {
@@ -520,21 +528,23 @@ void zobraz30() {
 // ...přidej obdobné funkce zobraz3(), zobraz4() ... zobraz30()
 // nebo je můžeš použít ze svého kódu výše
 
+
 void setup() {
   Serial.begin(9600);
   strip.begin();
-  strip.setBrightness(BRIGHTNESS);
+
 
   rtc.halt(false);
   rtc.writeProtect(false);
 
-  // **POZOR!** Nastavit čas pouze při prvním zapojení (potom zakomentovat, jinak se pořád přepisuje!)
-  // ODKOMENTUJ, spusť JEDNOU, pak zase ZAKOMENTUJ!
-  // Time t(2025, 4, 23, 17, 50, 0, 3);
-  // rtc.time(t);
-
-  // Zkontroluj načtený čas
   Time t = rtc.time();
+  int hodina = t.hr;
+
+  strip.setBrightness(zjistiJas(hodina));
+
+
+  strip.show();
+  
   Serial.print("Nacteny cas: ");
   Serial.print(t.yr); Serial.print("-");
   Serial.print(t.mon); Serial.print("-");
@@ -542,15 +552,26 @@ void setup() {
   Serial.print(t.hr); Serial.print(":");
   Serial.print(t.min); Serial.print(":");
   Serial.println(t.sec);
+
 }
 
 void loop() {
   Time t = rtc.time();    // získání aktuálního času a data
-  int den = t.date;       // získání dne v měsíci
 
+  int hodina = t.hr;
+  int cilovyJas = zjistiJas(hodina);
+
+  if (strip.getBrightness() != cilovyJas) {
+    strip.setBrightness(cilovyJas);
+    strip.show();
+    Serial.print("Zmena jasu: ");
+    Serial.println(cilovyJas);
+  }
+
+  int den = t.date;       // získání dne
   Serial.print("Den: ");
   Serial.println(den);
-     // získání dne v měsíci
+
 
   switch (den) {
     case 3:  zobraz3();  break;
