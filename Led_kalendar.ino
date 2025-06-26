@@ -12,7 +12,6 @@ const char* internal_signature = "🍀Autor: Ko0rbyS| Project:LED CALENDAR| ID: 
 #define NUM_LEDS   128
 //#define BRIGHTNESS 5
 
-
 Adafruit_NeoPixel strip(NUM_LEDS, LED_PIN, NEO_GRB + NEO_KHZ800);
 DS1302 rtc(DS1302_RST, DS1302_DAT, DS1302_CLK);
 
@@ -150,7 +149,6 @@ int leva_30_bile[] = {93, 94, 109, 110};
 int prava_30_vypnout[] = {17, 18, 19, 25, 27, 33, 35, 41, 43, 49, 50, 51};
 int prava_30_bile[] = {26, 34, 42};
 
-
 // >>> STYL POZADÍ
 int cervene[] = {
   0,1,2,3,4,5,6,7,
@@ -190,8 +188,6 @@ int zjistiJas(int hodina) {
   if (hodina >= 18 && hodina < 22) return 1; // večer
   return 0; // noc (22–6)
 }
-
-
 
 void zobraz3() {
   vykresliPozadi();
@@ -524,15 +520,9 @@ void zobraz30() {
   strip.show();
 }
 
-
-// ...přidej obdobné funkce zobraz3(), zobraz4() ... zobraz30()
-// nebo je můžeš použít ze svého kódu výše
-
-
 void setup() {
   Serial.begin(9600);
   strip.begin();
-
 
   rtc.halt(false);
   rtc.writeProtect(false);
@@ -541,10 +531,7 @@ void setup() {
   int hodina = t.hr;
 
   strip.setBrightness(zjistiJas(hodina));
-
-
   strip.show();
-  
   Serial.print("Nacteny cas: ");
   Serial.print(t.yr); Serial.print("-");
   Serial.print(t.mon); Serial.print("-");
@@ -571,7 +558,6 @@ void loop() {
   int den = t.date;       // získání dne
   Serial.print("Den: ");
   Serial.println(den);
-
 
   switch (den) {
     case 3:  zobraz3();  break;
