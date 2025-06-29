@@ -14,21 +14,20 @@
 Adafruit_NeoPixel strip(NUM_LEDS, LED_PIN, NEO_GRB + NEO_KHZ800);
 DS1302 rtc(DS1302_RST, DS1302_DAT, DS1302_CLK);
 
-int leva_1_bile[]    = {18, 26, 34, 42, 50,17,25,33,41,19,20,28,36,44,52,60,51,43,35,27,119,49};  // Příklad – nastav podle potřeby
-int leva_1_vypnout[] = {95,};  // Příklad – nastav podle potřeby
-int prava_1_bile[]   = {85, 93, 101, 109, 117,86, 94, 102, 110, 118,87,103,111}; // Příklad – nastav podle potřeby
-int prava_1_vypnout[]= {16,24,32,40,48,}; // Příklad – nastav podle potřeby
-
+int leva_1_bile[]    = {18, 26, 34, 42, 50,17,25,33,41,19,20,28,36,44,52,60,51,43,35,27,119,49};  
+int leva_1_vypnout[] = {95,};  
+int prava_1_bile[]   = {85, 93, 101, 109, 117,86, 94, 102, 110, 118,87,103,111}; 
+int prava_1_vypnout[]= {16,24,32,40,48,}; 
 
 int leva_2_bile[]    = {18, 19, 20, 26, 27, 34, 35, 42, 43, 50, 51, 52, 59, 60, 58,17, 25, 33, 41, 49};
 int leva_2_vypnout[] = {53 };
-int prava_2_bile[]   = {}; // číslice 2 je jen vlevo
+int prava_2_bile[]   = {}; 
 int prava_2_vypnout[]= {86, 87, 101, 102, 103, 109, 117, 118, 119};
 
 int leva_3_bile[]    = {25, 26, 41, 42};
 int leva_3_vypnout[] = {17, 18, 19, 27, 35, 34, 33, 43, 51, 50, 49};
 int prava_3_bile[]   = {85, 86, 87, 93, 95, 101, 102, 103, 109, 117, 118, 119};
-int prava_3_vypnout[]= {}; // nic nezhasínáme napravo
+int prava_3_vypnout[]= {}; 
 
 int leva_4_bile[]    = {18, 19, 26, 41, 42, 49, 50};
 int leva_4_vypnout[] = {17, 25, 33, 31, 35, 27, 43, 51};
@@ -100,60 +99,48 @@ int leva_17_vypnout[] = {86, 94, 102, 110, 118};
 int prava_17_bile[] = {25, 26, 33, 34, 41, 42, 49, 50};
 int prava_17_vypnout[] = {17, 18, 19, 27, 35, 43, 51};
 
-// "18"
+
 int leva_18_bile[] = {85, 87, 93, 95, 101, 103, 109, 111, 117, 119};
 int leva_18_vypnout[] = {86, 94, 102, 110, 118};
 int prava_18_bile[] = {26, 42};
 int prava_18_vypnout[] = {17, 18, 19, 25, 27, 33, 34, 35, 41, 43, 49, 50, 51};
 
-// "19"
 int leva_19_bile[] = {85, 87, 93, 95, 101, 103, 109, 111, 117, 119};
 int leva_19_vypnout[] = {86, 94, 102, 110, 118};
 int prava_19_bile[] = {26, 41, 42, 49, 50};
 int prava_19_vypnout[] = {17, 18, 19, 27, 35, 34, 33, 25, 43, 51};
 
-// "20"
 int dvacitka_led_zhasnout[] = {85, 86, 87, 95, 101, 102, 103, 109, 117, 118, 119, 17, 18, 19, 25, 27, 33, 35, 41, 43, 49, 50, 51};
 int dvacitka_led_bile[] = {26, 34, 42};
 
-// "21"
 int jednadvacitka_bila[] = {17, 19, 25, 27, 33, 35, 41, 43, 49, 51};
 int jednadvacitka_vypnout[] = {85, 86, 87, 95, 101, 102, 103, 109, 117, 118, 119};
 
-// "22"
 int leva_22_vypnout[] = {17, 18, 19, 27, 35, 34, 33, 41, 49, 50, 51};
 int leva_22_bile[] = {25, 26, 42, 43};
 int prava_22_vypnout[] = {81, 82, 83, 91, 97, 98, 99, 105, 113, 114, 115};
 
-// "23"
 int leva_23_vypnout[] = {17, 18, 19, 27, 35, 34, 33, 43, 51, 50, 49};
 int leva_23_bile[] = {25, 26, 41, 42};
 
-// "24"
 int leva_24_vypnout[] = {17, 25, 33, 34, 35, 43, 51};
 int leva_24_bile[] = {18, 19, 26, 41, 42, 49, 50};
 
-// "25"
 int leva_25_vypnout[] = {17, 18, 19, 27, 35, 34, 33, 41, 49, 50, 51};
 int leva_25_bile[] = {26, 27, 41, 42};
 
-// "26"
 int leva_26_vypnout[] = {17, 18, 19, 25, 33, 34, 35, 41, 43, 49, 50, 51};
 int leva_26_bile[] = {26, 27, 42};
 
-// "27"
 int leva_27_vypnout[] = {17, 18, 19, 27, 35, 43, 51};
 int leva_27_bile[] = {25, 26, 33, 34, 41, 42, 49, 50};
 
-// "28"
 int leva_28_vypnout[] = {17, 18, 19, 25, 27, 33, 34, 35, 41, 43, 49, 50, 51};
 int leva_28_bile[] = {26, 42};
 
-// "29"
 int leva_29_vypnout[] = {17, 18, 19, 27, 35, 34, 33, 25, 43, 51};
 int leva_29_bile[] = {26, 41, 42, 49, 50};
 
-// "30"
 int leva_30_vypnout[] = {85, 86, 87, 95, 103, 102, 101, 111, 119, 118, 117};
 int leva_30_bile[] = {93, 94, 109, 110};
 int prava_30_vypnout[] = {17, 18, 19, 25, 27, 33, 35, 41, 43, 49, 50, 51};
@@ -163,7 +150,6 @@ int leva_31_vypnout[] = {85, 86, 87, 95, 103, 102, 101, 111, 119, 118, 117};
 int leva_31_bile[] = {93, 94, 109, 110};
 int prava_31_vypnout[] = {18,26, 34, 42,50,25};
 int prava_31_bile[] = {17,19, 27, 33, 35, 41, 43, 49,51};
-
 
 // >>> STYL POZADÍ
 int cervene[] = {
@@ -199,9 +185,9 @@ void vykresliPozadi() {
     strip.setPixelColor(zhasnout_navic[i], 0);
 }
 int zjistiJas(int hodina) {
-  if (hodina >= 0 && hodina < 12) return 3; // ráno: silný jas
-  if (hodina >= 12 && hodina < 18) return 4; // odpoledne
-  if (hodina >= 18 && hodina < 24) return 1; // večer
+  if (hodina >= 0 && hodina < 12) return 3; // Ráno
+  if (hodina >= 12 && hodina < 18) return 4; // Odpoledne
+  if (hodina >= 18 && hodina < 24) return 1; // Večer
   return 0; // noc (22–6)
 }
 void zobraz1() {
@@ -230,34 +216,25 @@ void zobraz2() {
   strip.show();
 }
 
-
-
 void zobraz3() {
   vykresliPozadi();
-
-  // LEVÁ STRANA
   for (int i = 0; i < sizeof(leva_3_vypnout)/sizeof(int); i++)
     strip.setPixelColor(leva_3_vypnout[i], 0);
   for (int i = 0; i < sizeof(leva_3_bile)/sizeof(int); i++)
     strip.setPixelColor(leva_3_bile[i], strip.Color(255, 255, 255));
-
-  // PRAVÁ STRANA
   for (int i = 0; i < sizeof(prava_3_vypnout)/sizeof(int); i++)
     strip.setPixelColor(prava_3_vypnout[i], 0);
   for (int i = 0; i < sizeof(prava_3_bile)/sizeof(int); i++)
     strip.setPixelColor(prava_3_bile[i], strip.Color(255, 255, 255));
-
   strip.show();
 }
 
 void zobraz4() {
   vykresliPozadi();
-  // LEVÁ strana
   for (int i = 0; i < sizeof(leva_4_vypnout)/sizeof(int); i++)
     strip.setPixelColor(leva_4_vypnout[i], 0);
   for (int i = 0; i < sizeof(leva_4_bile)/sizeof(int); i++)
     strip.setPixelColor(leva_4_bile[i], strip.Color(255, 255, 255));
-  // PRAVÁ strana
   for (int i = 0; i < sizeof(prava_4_vypnout)/sizeof(int); i++)
     strip.setPixelColor(prava_4_vypnout[i], 0);
   for (int i = 0; i < sizeof(prava_4_bile)/sizeof(int); i++)
@@ -267,12 +244,10 @@ void zobraz4() {
 
 void zobraz5() {
   vykresliPozadi();
-  // LEVÁ
   for (int i = 0; i < sizeof(leva_5_vypnout)/sizeof(int); i++)
     strip.setPixelColor(leva_5_vypnout[i], 0);
   for (int i = 0; i < sizeof(leva_5_bile)/sizeof(int); i++)
     strip.setPixelColor(leva_5_bile[i], strip.Color(255, 255, 255));
-  // PRAVÁ
   for (int i = 0; i < sizeof(prava_5_bile)/sizeof(int); i++)
     strip.setPixelColor(prava_5_bile[i], strip.Color(255, 255, 255));
   strip.show();
@@ -280,12 +255,10 @@ void zobraz5() {
 
 void zobraz6() {
   vykresliPozadi();
-  // LEVÁ
   for (int i = 0; i < sizeof(leva_6_vypnout)/sizeof(int); i++)
     strip.setPixelColor(leva_6_vypnout[i], 0);
   for (int i = 0; i < sizeof(leva_6_bile)/sizeof(int); i++)
     strip.setPixelColor(leva_6_bile[i], strip.Color(255, 255, 255));
-  // PRAVÁ
   for (int i = 0; i < sizeof(prava_6_vypnout)/sizeof(int); i++)
     strip.setPixelColor(prava_6_vypnout[i], 0);
   for (int i = 0; i < sizeof(prava_6_bile)/sizeof(int); i++)
@@ -565,36 +538,26 @@ void zobraz30() {
 
 void zobraz31() {
   vykresliPozadi();
-
-  // LEVÁ strana – trojka
   for (int i = 0; i < sizeof(leva_31_vypnout)/sizeof(int); i++)
     strip.setPixelColor(leva_31_vypnout[i], 0);
   for (int i = 0; i < sizeof(leva_31_bile)/sizeof(int); i++)
     strip.setPixelColor(leva_31_bile[i], strip.Color(255, 255, 255));
-
-  // PRAVÁ strana – jednička
   for (int i = 0; i < sizeof(prava_31_vypnout)/sizeof(int); i++)
     strip.setPixelColor(prava_31_vypnout[i], 0);
   for (int i = 0; i < sizeof(prava_31_bile)/sizeof(int); i++)
     strip.setPixelColor(prava_31_bile[i], strip.Color(255, 255, 255));
-
   strip.show();
 }
-
-
-// ...přidej obdobné funkce zobraz3(), zobraz4() ... zobraz30()
-// nebo je můžeš použít ze svého kódu výše
 
 void setup() {
   Serial.begin(9600);
   strip.begin();
-
   rtc.halt(false);
   rtc.writeProtect(false);
-
+  
   Time t = rtc.time();
   int hodina = t.hr;
-
+  
   strip.setBrightness(zjistiJas(hodina));
   strip.show();
   Serial.print("Nacteny cas: ");
@@ -604,9 +567,7 @@ void setup() {
   Serial.print(t.hr); Serial.print(":");
   Serial.print(t.min); Serial.print(":");
   Serial.println(t.sec);
-
 }
-
 
 void loop() {
   static int testDen = 31;          // ← Zde nastav den pro test
@@ -705,6 +666,5 @@ void loop() {
         break;
     }
   }
-
   delay(2000);
 }
