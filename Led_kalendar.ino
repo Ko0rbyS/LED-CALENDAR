@@ -1,4 +1,3 @@
-const char* internal_signature = "🍀Autor: Ko0rbyS| Project:LED CALENDAR| ID: A73X-2025";
 #include <Adafruit_NeoPixel.h>
 #include <DS1302.h>
 
@@ -10,10 +9,21 @@ const char* internal_signature = "🍀Autor: Ko0rbyS| Project:LED CALENDAR| ID: 
 // LED pásek
 #define LED_PIN    6
 #define NUM_LEDS   128
-//#define BRIGHTNESS 5
+//#define BRIGHTNESS 76
 
 Adafruit_NeoPixel strip(NUM_LEDS, LED_PIN, NEO_GRB + NEO_KHZ800);
 DS1302 rtc(DS1302_RST, DS1302_DAT, DS1302_CLK);
+
+int leva_1_bile[]    = {18, 26, 34, 42, 50,17,25,33,41,19,20,28,36,44,52,60,51,43,35,27,119,49};  // Příklad – nastav podle potřeby
+int leva_1_vypnout[] = {95,};  // Příklad – nastav podle potřeby
+int prava_1_bile[]   = {85, 93, 101, 109, 117,86, 94, 102, 110, 118,87,103,111}; // Příklad – nastav podle potřeby
+int prava_1_vypnout[]= {16,24,32,40,48,}; // Příklad – nastav podle potřeby
+
+
+int leva_2_bile[]    = {18, 19, 20, 26, 27, 34, 35, 42, 43, 50, 51, 52, 59, 60, 58,17, 25, 33, 41, 49};
+int leva_2_vypnout[] = {53 };
+int prava_2_bile[]   = {}; // číslice 2 je jen vlevo
+int prava_2_vypnout[]= {86, 87, 101, 102, 103, 109, 117, 118, 119};
 
 int leva_3_bile[]    = {25, 26, 41, 42};
 int leva_3_vypnout[] = {17, 18, 19, 27, 35, 34, 33, 43, 51, 50, 49};
@@ -149,6 +159,12 @@ int leva_30_bile[] = {93, 94, 109, 110};
 int prava_30_vypnout[] = {17, 18, 19, 25, 27, 33, 35, 41, 43, 49, 50, 51};
 int prava_30_bile[] = {26, 34, 42};
 
+int leva_31_vypnout[] = {85, 86, 87, 95, 103, 102, 101, 111, 119, 118, 117};
+int leva_31_bile[] = {93, 94, 109, 110};
+int prava_31_vypnout[] = {18,26, 34, 42,50,25};
+int prava_31_bile[] = {17,19, 27, 33, 35, 41, 43, 49,51};
+
+
 // >>> STYL POZADÍ
 int cervene[] = {
   0,1,2,3,4,5,6,7,
@@ -183,11 +199,38 @@ void vykresliPozadi() {
     strip.setPixelColor(zhasnout_navic[i], 0);
 }
 int zjistiJas(int hodina) {
-  if (hodina >= 6 && hodina < 12) return 3; // ráno: silný jas
+  if (hodina >= 0 && hodina < 12) return 3; // ráno: silný jas
   if (hodina >= 12 && hodina < 18) return 4; // odpoledne
-  if (hodina >= 18 && hodina < 22) return 1; // večer
+  if (hodina >= 18 && hodina < 24) return 1; // večer
   return 0; // noc (22–6)
 }
+void zobraz1() {
+  vykresliPozadi();
+  for (int i = 0; i < sizeof(leva_1_vypnout)/sizeof(int); i++)
+    strip.setPixelColor(leva_1_vypnout[i], 0);
+  for (int i = 0; i < sizeof(leva_1_bile)/sizeof(int); i++)
+    strip.setPixelColor(leva_1_bile[i], strip.Color(255, 255, 255));
+  for (int i = 0; i < sizeof(prava_1_vypnout)/sizeof(int); i++)
+    strip.setPixelColor(prava_1_vypnout[i], 0);
+  for (int i = 0; i < sizeof(prava_1_bile)/sizeof(int); i++)
+    strip.setPixelColor(prava_1_bile[i], strip.Color(255, 255, 255));
+  strip.show();
+}
+
+void zobraz2() {
+  vykresliPozadi();
+  for (int i = 0; i < sizeof(leva_2_vypnout)/sizeof(int); i++)
+    strip.setPixelColor(leva_2_vypnout[i], 0);
+  for (int i = 0; i < sizeof(leva_2_bile)/sizeof(int); i++)
+    strip.setPixelColor(leva_2_bile[i], strip.Color(255, 255, 255));
+  for (int i = 0; i < sizeof(prava_2_vypnout)/sizeof(int); i++)
+    strip.setPixelColor(prava_2_vypnout[i], 0);
+  for (int i = 0; i < sizeof(prava_2_bile)/sizeof(int); i++)
+    strip.setPixelColor(prava_2_bile[i], strip.Color(255, 255, 255));
+  strip.show();
+}
+
+
 
 void zobraz3() {
   vykresliPozadi();
@@ -520,6 +563,28 @@ void zobraz30() {
   strip.show();
 }
 
+void zobraz31() {
+  vykresliPozadi();
+
+  // LEVÁ strana – trojka
+  for (int i = 0; i < sizeof(leva_31_vypnout)/sizeof(int); i++)
+    strip.setPixelColor(leva_31_vypnout[i], 0);
+  for (int i = 0; i < sizeof(leva_31_bile)/sizeof(int); i++)
+    strip.setPixelColor(leva_31_bile[i], strip.Color(255, 255, 255));
+
+  // PRAVÁ strana – jednička
+  for (int i = 0; i < sizeof(prava_31_vypnout)/sizeof(int); i++)
+    strip.setPixelColor(prava_31_vypnout[i], 0);
+  for (int i = 0; i < sizeof(prava_31_bile)/sizeof(int); i++)
+    strip.setPixelColor(prava_31_bile[i], strip.Color(255, 255, 255));
+
+  strip.show();
+}
+
+
+// ...přidej obdobné funkce zobraz3(), zobraz4() ... zobraz30()
+// nebo je můžeš použít ze svého kódu výše
+
 void setup() {
   Serial.begin(9600);
   strip.begin();
@@ -542,9 +607,12 @@ void setup() {
 
 }
 
-void loop() {
-  Time t = rtc.time();    // získání aktuálního času a data
 
+void loop() {
+  static int testDen = 31;          // ← Zde nastav den pro test
+  static bool manualMode = true;   // ← true = testovací režim, false = reálný čas
+
+  Time t = rtc.time();
   int hodina = t.hr;
   int cilovyJas = zjistiJas(hodina);
 
@@ -555,43 +623,88 @@ void loop() {
     Serial.println(cilovyJas);
   }
 
-  int den = t.date;       // získání dne
+  int den = t.date;
   Serial.print("Den: ");
   Serial.println(den);
 
-  switch (den) {
-    case 3:  zobraz3();  break;
-    case 4:  zobraz4();  break;
-    case 5:  zobraz5();  break;
-    case 6:  zobraz6();  break;
-    case 7:  zobraz7();  break;
-    case 8:  zobraz8();  break;
-    case 9:  zobraz9();  break;
-    case 10: zobraz10(); break;
-    case 11: zobraz11(); break;
-    case 12: zobraz12(); break;
-    case 13: zobraz13(); break;
-    case 14: zobraz14(); break;
-    case 15: zobraz15(); break;
-    case 16: zobraz16(); break;
-    case 17: zobraz17(); break;
-    case 18: zobraz18(); break;
-    case 19: zobraz19(); break;
-    case 20: zobraz20(); break;
-    case 21: zobraz21(); break;
-    case 22: zobraz22(); break;
-    case 23: zobraz23(); break;
-    case 24: zobraz24(); break;
-    case 25: zobraz25(); break;
-    case 26: zobraz26(); break;
-    case 27: zobraz27(); break;
-    case 28: zobraz28(); break;
-    case 29: zobraz29(); break;
-    case 30: zobraz30(); break;
-    default:
-      strip.clear(); strip.show();
-      break;
+  if (manualMode) {
+    Serial.print("Testovací den: ");
+    Serial.println(testDen);
+
+    switch (testDen) {
+      case 1:  zobraz1();  break; 
+      case 2:  zobraz2();  break;
+      case 3:  zobraz3();  break;
+      case 4:  zobraz4();  break;
+      case 5:  zobraz5();  break;
+      case 6:  zobraz6();  break;
+      case 7:  zobraz7();  break;
+      case 8:  zobraz8();  break;
+      case 9:  zobraz9();  break;
+      case 10: zobraz10(); break;
+      case 11: zobraz11(); break;
+      case 12: zobraz12(); break;
+      case 13: zobraz13(); break;
+      case 14: zobraz14(); break;
+      case 15: zobraz15(); break;
+      case 16: zobraz16(); break;
+      case 17: zobraz17(); break;
+      case 18: zobraz18(); break;
+      case 19: zobraz19(); break;
+      case 20: zobraz20(); break;
+      case 21: zobraz21(); break;
+      case 22: zobraz22(); break;
+      case 23: zobraz23(); break;
+      case 24: zobraz24(); break;
+      case 25: zobraz25(); break;
+      case 26: zobraz26(); break;
+      case 27: zobraz27(); break;
+      case 28: zobraz28(); break;
+      case 29: zobraz29(); break;
+      case 30: zobraz30(); break;
+      case 31: zobraz31(); break;
+      default:
+        strip.clear(); strip.show();
+        break;
+    }
+  } else {
+    switch (den) {
+      case 1:  zobraz1();  break; 
+      case 2:  zobraz2();  break;
+      case 3:  zobraz3();  break;
+      case 4:  zobraz4();  break;
+      case 5:  zobraz5();  break;
+      case 6:  zobraz6();  break;
+      case 7:  zobraz7();  break;
+      case 8:  zobraz8();  break;
+      case 9:  zobraz9();  break;
+      case 10: zobraz10(); break;
+      case 11: zobraz11(); break;
+      case 12: zobraz12(); break;
+      case 13: zobraz13(); break;
+      case 14: zobraz14(); break;
+      case 15: zobraz15(); break;
+      case 16: zobraz16(); break;
+      case 17: zobraz17(); break;
+      case 18: zobraz18(); break;
+      case 19: zobraz19(); break;
+      case 20: zobraz20(); break;
+      case 21: zobraz21(); break;
+      case 22: zobraz22(); break;
+      case 23: zobraz23(); break;
+      case 24: zobraz24(); break;
+      case 25: zobraz25(); break;
+      case 26: zobraz26(); break;
+      case 27: zobraz27(); break;
+      case 28: zobraz28(); break;
+      case 29: zobraz29(); break;
+      case 30: zobraz30(); break;
+      case 31: zobraz31(); break;
+      default:
+        strip.clear(); strip.show();
+        break;
+    }
   }
 
-  delay(2000); // aktualizace každé 2 sekundy
+  delay(2000);
 }
