@@ -1,112 +1,118 @@
 #include <Adafruit_NeoPixel.h>
 #include <DS1302.h>
+#include <DHT.h>
+#include <avr/pgmspace.h>
 
 #define LED_PIN     6
 #define NUM_LEDS    128
 #define DS1302_RST  7
 #define DS1302_DAT  8
 #define DS1302_CLK  9
+#define DHTPIN 4
+#define DHTTYPE DHT11
+#define BUTTON_PIN 2
+DHT dht(DHTPIN, DHTTYPE);
 
 Adafruit_NeoPixel strip(NUM_LEDS, LED_PIN, NEO_GRB + NEO_KHZ800);
 DS1302 rtc(DS1302_RST, DS1302_DAT, DS1302_CLK);
 
-//TESTDAY
-bool manualMode = false;   // true = testování, false = RTC
-int testDen = 31;          
+bool manualMode = false;
+int testDen = 31;
 
-// LEDKY: trvale svícící pozadí
 int cervene[] = {0, 1, 2, 3, 4, 8, 9, 10, 11, 12, 68, 69, 70, 71, 76, 77, 78, 79};
 int bile[] = {16,17,18,19,20,24,25,26,27,28,32,33,34,35,36,40,41,42,43,44,48,49,50,51,52,56,57,58,59,60,
               84,85,86,87,92,93,94,95,100,101,102,103,108,109,110,111,116,117,118,119,124,125,126,127};
 
-// === VYPNUTÍ LEDEK
-int den_1_zhasnout[] = {48, 40, 32, 24, 16, 95};
-int den_2_zhasnout[] = {87, 16 ,17, 25, 33, 32, 103, 111, 119, 48, 49};
-int den_3_zhasnout[] = {87, 16 ,17, 25, 33, 32, 103, 41, 119, 48, 49};
-int den_4_zhasnout[] = {87, 95, 25, 33, 32, 103, 41, 49};
-int den_5_zhasnout[] = {87, 16 ,17, 95, 33, 32, 103, 41, 119, 48, 49};
-int den_6_zhasnout[] = {87, 16 ,17, 95, 33, 32, 103, 41, 119, 48, 49, 111};
-int den_7_zhasnout[] = {87, 16 ,17, 25, 33, 41, 49};
-int den_8_zhasnout[] = {87, 16 ,17, 25, 33, 41, 49, 95, 103, 32, 111, 119, 48};
-int den_9_zhasnout[] = {87, 16 ,17, 25, 33, 41, 49, 95, 103, 32};
-int den_10_zhasnout[] = {86, 93, 94, 102, 110, 118, 17, 18, 19, 25, 27, 33, 35, 41, 43, 49, 50, 51};
-int den_11_zhasnout[] = {87, 94, 95, 103, 111, 119, 18, 25, 26, 34, 42, 50 };
-int den_12_zhasnout[] = {86, 93, 94, 102, 110, 118, 17, 18, 19, 27, 35, 34, 33, 41, 49, 50, 51};
-int den_13_zhasnout[] = {86, 93, 94, 102, 110, 118, 17, 18, 19, 27, 35, 34, 33, 43, 51, 50, 49};
-int den_14_zhasnout[] = {86, 93, 94, 102, 110, 118, 17, 25, 27, 33, 34, 35, 43, 51};
-int den_15_zhasnout[] = {86, 93, 94, 102, 110, 118, 17, 18, 19, 25, 35, 34, 33, 43, 49, 50, 51};
-int den_16_zhasnout[] = {86, 93, 94, 102, 110, 118, 17, 18, 19, 25, 35, 34, 33, 41, 43, 49, 50, 51};
-int den_17_zhasnout[] = {86, 93, 94, 102, 110, 118, 17, 18, 19, 27, 35, 43, 51};
-int den_18_zhasnout[] = {86, 93, 94, 102, 110, 118, 17, 18, 19, 25, 27, 35, 34, 33, 41, 43, 49, 50, 51};
-int den_19_zhasnout[] = {86, 93, 94, 102, 110, 118, 17, 18, 19, 25, 27, 33, 34, 35, 43, 51};
-int den_20_zhasnout[] = {85, 86, 87, 95, 103, 102, 101, 109, 117, 118, 119, 17, 18, 19, 25, 27, 33, 35, 41, 43, 49, 50, 51};
-int den_21_zhasnout[] = {85, 86, 87, 95, 103, 102, 101, 109, 117, 118, 119, 18, 25, 26, 34, 42, 50 };
-int den_22_zhasnout[] = {85, 86, 87, 95, 103, 102, 101, 109, 117, 118, 119, 17, 18, 19, 27, 35, 34, 33, 41, 49, 50, 51};
-int den_23_zhasnout[] = {85, 86, 87, 95, 103, 102, 101, 109, 117, 118, 119, 17, 18, 19, 27, 35, 34, 33, 43, 51, 50, 49};
-int den_24_zhasnout[] = {85, 86, 87, 95, 103, 102, 101, 109, 117, 118, 119, 17, 25, 27, 33, 34, 35, 43, 51};
-int den_25_zhasnout[] = {85, 86, 87, 95, 103, 102, 101, 109, 117, 118, 119, 17, 18, 19, 25, 35, 34, 33, 43, 49, 50, 51};
-int den_26_zhasnout[] = {85, 86, 87, 95, 103, 102, 101, 109, 117, 118, 119, 17, 18, 19, 25, 35, 34, 33, 41, 43, 49, 50, 51};
-int den_27_zhasnout[] = {85, 86, 87, 95, 103, 102, 101, 109, 117, 118, 119, 17, 18, 19, 27, 35, 43, 51};
-int den_28_zhasnout[] = {85, 86, 87, 95, 103, 102, 101, 109, 117, 118, 119, 17, 18, 19, 25, 27, 35, 34, 33, 41, 43, 49, 50, 51};
-int den_29_zhasnout[] = {85, 86, 87, 95, 103, 102, 101, 109, 117, 118, 119, 17, 18, 19, 25, 27, 33, 34, 35, 43, 51};
-int den_30_zhasnout[] = {85, 86, 87, 95, 103, 102, 101, 111, 119, 118, 117, 17, 18, 19, 25, 27, 33, 35, 41, 43, 49, 50, 51};
-int den_31_zhasnout[] = {85, 86, 87, 95, 103, 102, 101, 111, 119, 118, 117, 19, 27, 26, 35, 43, 51 };
+const uint8_t den_1[] PROGMEM = {48, 40, 32, 24, 16, 95};
+const uint8_t den_2[] PROGMEM = {87, 16, 17, 25, 33, 32, 103, 111, 119, 48, 49};
+const uint8_t den_3[] PROGMEM = {87, 16, 17, 25, 33, 32, 103, 41, 119, 48, 49};
+const uint8_t den_4[] PROGMEM = {87, 95, 25, 33, 32, 103, 41, 49};
+const uint8_t den_5[] PROGMEM = {87, 16, 17, 95, 33, 32, 103, 41, 119, 48, 49};
+const uint8_t den_6[] PROGMEM = {87, 16, 17, 95, 33, 32, 103, 41, 119, 48, 49, 111};
+const uint8_t den_7[] PROGMEM = {87, 16, 17, 25, 33, 41, 49};
+const uint8_t den_8[] PROGMEM = {87, 16, 17, 25, 33, 41, 49, 95, 103, 32, 111, 119, 48};
+const uint8_t den_9[] PROGMEM = {87, 16, 17, 25, 33, 41, 49, 95, 103, 32};
+const uint8_t den_10[] PROGMEM = {86, 93, 94, 102, 110, 118, 17, 18, 19, 25, 27, 33, 35, 41, 43, 49, 50, 51};
+const uint8_t den_11[] PROGMEM = {87, 94, 95, 103, 111, 119, 18, 25, 26, 34, 42, 50};
+const uint8_t den_12[] PROGMEM = {86, 93, 94, 102, 110, 118, 17, 18, 19, 27, 35, 34, 33, 41, 49, 50, 51};
+const uint8_t den_13[] PROGMEM = {86, 93, 94, 102, 110, 118, 17, 18, 19, 27, 35, 34, 33, 43, 51, 50, 49};
+const uint8_t den_14[] PROGMEM = {86, 93, 94, 102, 110, 118, 17, 25, 27, 33, 34, 35, 43, 51};
+const uint8_t den_15[] PROGMEM = {86, 93, 94, 102, 110, 118, 17, 18, 19, 25, 35, 34, 33, 43, 49, 50, 51};
+const uint8_t den_16[] PROGMEM = {86, 93, 94, 102, 110, 118, 17, 18, 19, 25, 35, 34, 33, 41, 43, 49, 50, 51};
+const uint8_t den_17[] PROGMEM = {86, 93, 94, 102, 110, 118, 17, 18, 19, 27, 35, 43, 51};
+const uint8_t den_18[] PROGMEM = {86, 93, 94, 102, 110, 118, 17, 18, 19, 25, 27, 35, 34, 33, 41, 43, 49, 50, 51};
+const uint8_t den_19[] PROGMEM = {86, 93, 94, 102, 110, 118, 17, 18, 19, 25, 27, 33, 34, 35, 43, 51};
+const uint8_t den_20[] PROGMEM = {85, 86, 87, 95, 103, 102, 101, 109, 117, 118, 119, 17, 18, 19, 25, 27, 33, 35, 41, 43, 49, 50, 51};
+const uint8_t den_21[] PROGMEM = {85, 86, 87, 95, 103, 102, 101, 109, 117, 118, 119, 18, 25, 26, 34, 42, 50};
+const uint8_t den_22[] PROGMEM = {85, 86, 87, 95, 103, 102, 101, 109, 117, 118, 119, 17, 18, 19, 27, 35, 34, 33, 41, 49, 50, 51};
+const uint8_t den_23[] PROGMEM = {85, 86, 87, 95, 103, 102, 101, 109, 117, 118, 119, 17, 18, 19, 27, 35, 34, 33, 43, 51, 50, 49};
+const uint8_t den_24[] PROGMEM = {85, 86, 87, 95, 103, 102, 101, 109, 117, 118, 119, 17, 25, 27, 33, 34, 35, 43, 51};
+const uint8_t den_25[] PROGMEM = {85, 86, 87, 95, 103, 102, 101, 109, 117, 118, 119, 17, 18, 19, 25, 35, 34, 33, 43, 49, 50, 51};
+const uint8_t den_26[] PROGMEM = {85, 86, 87, 95, 103, 102, 101, 109, 117, 118, 119, 17, 18, 19, 25, 35, 34, 33, 41, 43, 49, 50, 51};
+const uint8_t den_27[] PROGMEM = {85, 86, 87, 95, 103, 102, 101, 109, 117, 118, 119, 17, 18, 19, 27, 35, 43, 51};
+const uint8_t den_28[] PROGMEM = {85, 86, 87, 95, 103, 102, 101, 109, 117, 118, 119, 17, 18, 19, 25, 27, 35, 34, 33, 41, 43, 49, 50, 51};
+const uint8_t den_29[] PROGMEM = {85, 86, 87, 95, 103, 102, 101, 109, 117, 118, 119, 17, 18, 19, 25, 27, 33, 34, 35, 43, 51};
+const uint8_t den_30[] PROGMEM = {85, 86, 87, 95, 103, 102, 101, 111, 119, 118, 117, 17, 18, 19, 25, 27, 33, 35, 41, 43, 49, 50, 51};
+const uint8_t den_31[] PROGMEM = {85, 86, 87, 95, 103, 102, 101, 111, 119, 118, 117, 19, 27, 26, 35, 43, 51};
 
+const uint8_t* const dny_zhasnout[] PROGMEM = {
+  den_1, den_2, den_3, den_4, den_5, den_6, den_7, den_8,
+  den_9, den_10, den_11, den_12, den_13, den_14, den_15, den_16,
+  den_17, den_18, den_19, den_20, den_21, den_22, den_23, den_24,
+  den_25, den_26, den_27, den_28, den_29, den_30, den_31
+};
 
-void vykresliPozadi() {
+const uint8_t dny_delky[] PROGMEM = {
+  sizeof(den_1), sizeof(den_2), sizeof(den_3), sizeof(den_4), sizeof(den_5), sizeof(den_6), sizeof(den_7), sizeof(den_8),
+  sizeof(den_9), sizeof(den_10), sizeof(den_11), sizeof(den_12), sizeof(den_13), sizeof(den_14), sizeof(den_15), sizeof(den_16),
+  sizeof(den_17), sizeof(den_18), sizeof(den_19), sizeof(den_20), sizeof(den_21), sizeof(den_22), sizeof(den_23), sizeof(den_24),
+  sizeof(den_25), sizeof(den_26), sizeof(den_27), sizeof(den_28), sizeof(den_29), sizeof(den_30), sizeof(den_31)
+};
+
+//PRO VLHKOST
+const uint8_t den_32[] = {};
+const uint8_t den_33[] = {};
+const uint8_t den_34[] = {};
+
+int zjistiJas(int hodina) {
+  if (hodina >= 6 && hodina < 12) return 3;
+  if (hodina >= 12 && hodina < 18) return 2;
+  if (hodina >= 18 && hodina < 22) return 1;
+  return 0;
+}
+
+void vykresliPozadi(bool teplota = false) {
+  uint32_t barva = teplota ? strip.Color(255, 150, 0) : strip.Color(255, 0 , 0);
   for (int i = 0; i < sizeof(cervene)/sizeof(int); i++)
-    strip.setPixelColor(cervene[i], strip.Color(255, 0, 0));
-
+    strip.setPixelColor(cervene[i], barva);
   for (int i = 0; i < sizeof(bile)/sizeof(int); i++)
     strip.setPixelColor(bile[i], strip.Color(255, 255, 255));
 }
 
-void zobrazDen(int den) {
+void zobrazDen(uint8_t den, bool teplota = false) {
   strip.clear();
-  vykresliPozadi();
+  vykresliPozadi(teplota);
 
-  int* ledky = nullptr;
-  int pocet = 0;
+  const uint8_t* ptr = nullptr;
+  uint8_t delka = 0;
 
-  switch (den) {
-    case 1: ledky = den_1_zhasnout; pocet = sizeof(den_1_zhasnout)/sizeof(int); break;
-    case 2: ledky = den_2_zhasnout; pocet = sizeof(den_2_zhasnout)/sizeof(int); break;
-    case 3: ledky = den_3_zhasnout; pocet = sizeof(den_3_zhasnout)/sizeof(int); break;
-    case 4: ledky = den_4_zhasnout; pocet = sizeof(den_4_zhasnout)/sizeof(int); break;
-    case 5: ledky = den_5_zhasnout; pocet = sizeof(den_5_zhasnout)/sizeof(int); break;
-    case 6: ledky = den_6_zhasnout; pocet = sizeof(den_6_zhasnout)/sizeof(int); break;
-    case 7: ledky = den_7_zhasnout; pocet = sizeof(den_7_zhasnout)/sizeof(int); break;
-    case 8: ledky = den_8_zhasnout; pocet = sizeof(den_8_zhasnout)/sizeof(int); break;
-    case 9: ledky = den_9_zhasnout; pocet = sizeof(den_9_zhasnout)/sizeof(int); break;
-    case 10: ledky = den_10_zhasnout; pocet = sizeof(den_10_zhasnout)/sizeof(int); break;
-    case 11: ledky = den_11_zhasnout; pocet = sizeof(den_11_zhasnout)/sizeof(int); break;
-    case 12: ledky = den_12_zhasnout; pocet = sizeof(den_12_zhasnout)/sizeof(int); break;
-    case 13: ledky = den_13_zhasnout; pocet = sizeof(den_13_zhasnout)/sizeof(int); break;
-    case 14: ledky = den_14_zhasnout; pocet = sizeof(den_14_zhasnout)/sizeof(int); break;
-    case 15: ledky = den_15_zhasnout; pocet = sizeof(den_15_zhasnout)/sizeof(int); break;
-    case 16: ledky = den_16_zhasnout; pocet = sizeof(den_16_zhasnout)/sizeof(int); break;
-    case 17: ledky = den_17_zhasnout; pocet = sizeof(den_17_zhasnout)/sizeof(int); break;
-    case 18: ledky = den_18_zhasnout; pocet = sizeof(den_18_zhasnout)/sizeof(int); break;
-    case 19: ledky = den_19_zhasnout; pocet = sizeof(den_19_zhasnout)/sizeof(int); break;
-    case 20: ledky = den_20_zhasnout; pocet = sizeof(den_20_zhasnout)/sizeof(int); break;
-    case 21: ledky = den_21_zhasnout; pocet = sizeof(den_21_zhasnout)/sizeof(int); break;
-    case 22: ledky = den_22_zhasnout; pocet = sizeof(den_22_zhasnout)/sizeof(int); break;
-    case 23: ledky = den_23_zhasnout; pocet = sizeof(den_23_zhasnout)/sizeof(int); break;
-    case 24: ledky = den_24_zhasnout; pocet = sizeof(den_24_zhasnout)/sizeof(int); break;
-    case 25: ledky = den_25_zhasnout; pocet = sizeof(den_25_zhasnout)/sizeof(int); break;
-    case 26: ledky = den_26_zhasnout; pocet = sizeof(den_26_zhasnout)/sizeof(int); break;
-    case 27: ledky = den_27_zhasnout; pocet = sizeof(den_27_zhasnout)/sizeof(int); break;
-    case 28: ledky = den_28_zhasnout; pocet = sizeof(den_28_zhasnout)/sizeof(int); break;
-    case 29: ledky = den_29_zhasnout; pocet = sizeof(den_29_zhasnout)/sizeof(int); break;
-    case 30: ledky = den_30_zhasnout; pocet = sizeof(den_30_zhasnout)/sizeof(int); break;
-    case 31: ledky = den_31_zhasnout; pocet = sizeof(den_31_zhasnout)/sizeof(int); break;
-  }
-  
-  
+  if (den >= 1 && den <= 31) {
+    ptr = (const uint8_t*)pgm_read_word(&(dny_zhasnout[den - 1]));
+    delka = pgm_read_byte(&(dny_delky[den - 1]));
 
-  if (ledky != nullptr) {
-    for (int i = 0; i < pocet; i++)
-      strip.setPixelColor(ledky[i], 0);
+    for (uint8_t i = 0; i < delka; i++) {
+      uint8_t index = pgm_read_byte(&(ptr[i]));
+      strip.setPixelColor(index, 0);
+    }
+  } else if (den == 32) {
+    for (uint8_t i = 0; i < sizeof(den_32); i++)
+      strip.setPixelColor(den_32[i], 0);
+  } else if (den == 33) {
+    for (uint8_t i = 0; i < sizeof(den_33); i++)
+      strip.setPixelColor(den_33[i], 0);
+  } else if (den == 34) {
+    for (uint8_t i = 0; i < sizeof(den_34); i++)
+      strip.setPixelColor(den_34[i], 0);
   }
 
   strip.show();
@@ -116,20 +122,58 @@ void setup() {
   strip.begin();
   rtc.halt(false);
   rtc.writeProtect(false);
-
+  pinMode(BUTTON_PIN, INPUT_PULLUP);
+  dht.begin();
   Time t = rtc.time();
-  strip.setBrightness(1); // pevne nastavený jas
-  zobrazDen(t.date);      // zobrazení dne podle RTC
+  strip.setBrightness(zjistiJas(t.hr)); 
+  zobrazDen(t.date);
 }
 
+
 void loop() {
-  if (manualMode) {
-    zobrazDen(testDen);  // ruční test
-  } else {
-    Time t = rtc.time();
-    zobrazDen(t.date);   // RTC
+  static bool zobrazenaTeplota = false;
+  static unsigned long casZobrazeniTeploty = 0;
+  
+  Time t = rtc.time();  
+  int jas = zjistiJas(t.hr);
+  strip.setBrightness(jas);
+
+  if (jas == 0) {
+    strip.clear();
+    strip.show();
+    delay(1000);
+    return;
   }
 
-  delay(5000);
+  if (manualMode) {
+    zobrazDen(testDen);
+    delay(2000);
+    return;
+  }
+
+  if (digitalRead(BUTTON_PIN) == LOW && !zobrazenaTeplota) {
+    delay(50);
+    if (digitalRead(BUTTON_PIN) == LOW) {
+      float temp = dht.readTemperature();
+      if (!isnan(temp)) {
+        int tRounded = constrain(round(temp), 1, 34);
+        zobrazDen(tRounded, true);
+        zobrazenaTeplota = true;
+        casZobrazeniTeploty = millis();
+        while (digitalRead(BUTTON_PIN) == LOW);
+      }
+    }
+  }
+
+  if (zobrazenaTeplota && millis() - casZobrazeniTeploty >= 5000) {
+    zobrazenaTeplota = false;
+    zobrazDen(t.date);
+  }
+
+  if (!zobrazenaTeplota) {
+    zobrazDen(t.date);
+  }
+
+  delay(1000);
 }
 
